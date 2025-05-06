@@ -1,0 +1,27 @@
+# Node.js dependencies
+node_modules/
+
+# Built files
+dist/
+build/
+
+# Logs and temp files
+*.log
+tmp/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Optional npm debug log
+npm-debug.log*
+
+# Yarn specific
+yarn-error.log
