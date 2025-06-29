@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import prisma from '../config/prismaClient';
 import axios from 'axios';
 import { generateTokens } from '../utils/generateTokens';
+import { URL_BASE_PUBLIC } from '../config/constants';
 
 export const LoginWithEmail = errorHandler(
   async (req: Request, res: Response) => {
@@ -35,7 +36,7 @@ export const LoginWithEmail = errorHandler(
 
     try {
       const data = await axios.get(
-        `http://localhost:3002/user/profile/${user.id}`
+        `${URL_BASE_PUBLIC}/user/profile/${user.id}`
       );
 
       if (data.data.status) {
@@ -54,7 +55,7 @@ export const LoginWithEmail = errorHandler(
           httpOnly: true,
           secure: true,
           sameSite: 'strict',
-          maxAge: 15 * 60 * 1000, // 15 minutes
+          maxAge: 24*60 * 60 * 1000, // 15 minutes
         });
 
         return res.status(200).json({

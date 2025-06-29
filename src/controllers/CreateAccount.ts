@@ -3,6 +3,7 @@ import axios from 'axios';
 import redisClient from '../config/redis';
 import { errorHandler } from '../utils/ErrorHandler';
 import { json } from 'stream/consumers';
+import { URL_BASE_PUBLIC } from '../config/constants';
 
 const CreateAccountWithGooge = async (
   res: Response,
@@ -23,7 +24,7 @@ const CreateAccountWithGooge = async (
   console.log('userSession', userSessionData);
 
   const { data: usernameCheck } = await axios.get(
-    `http://localhost:3002/user/username/check?user_name=${username}`,
+    `${URL_BASE_PUBLIC}/user/username/check?user_name=${username}`,
   );
   console.log('usernameCheck', usernameCheck);
   if (!usernameCheck.status) {
@@ -31,7 +32,7 @@ const CreateAccountWithGooge = async (
   }
 
   const { data: userCreate } = await axios.post(
-    'http://localhost:3002/auth/signup/create-user',
+    `${URL_BASE_PUBLIC}/auth/signup/create-user`,
     { signUpOption: 'Google', userSessionData },
   );
 
@@ -42,7 +43,7 @@ const CreateAccountWithGooge = async (
   const userId = userCreate.userId as string;
 
   const { data: profileCreate } = await axios.post(
-    'http://localhost:3002/user/create-profile',
+    `${URL_BASE_PUBLIC}/user/create-profile`,
     {
       profileId: userId,
       email,
@@ -52,7 +53,7 @@ const CreateAccountWithGooge = async (
   );
 
   if (!profileCreate.status) {
-    await axios.delete('http://localhost:3002/auth/signup/delete-user', {
+    await axios.delete(`${URL_BASE_PUBLIC}/auth/signup/delete-user`, {
       data: { id: userId },
     });
     return res
@@ -82,7 +83,7 @@ let CreateAccountWithEmail = async (
   console.log('userSession', userSessionData);
 
   const { data: usernameCheck } = await axios.get(
-    `http://localhost:3002/user/username/check?user_name=${username}`,
+    `${URL_BASE_PUBLIC}/user/username/check?user_name=${username}`,
   );
   console.log('usernameCheck', usernameCheck);
   if (!usernameCheck.status) {
@@ -90,7 +91,7 @@ let CreateAccountWithEmail = async (
   }
 
   const { data: userCreate } = await axios.post(
-    'http://localhost:3002/auth/signup/create-user',
+    `${URL_BASE_PUBLIC}/auth/signup/create-user`,
     { signUpOption: 'Email', userSessionData },
   );
 
@@ -101,17 +102,17 @@ let CreateAccountWithEmail = async (
   const userId = userCreate.userId as string;
 
   const { data: profileCreate } = await axios.post(
-    'http://localhost:3002/user/create-profile',
+    `${URL_BASE_PUBLIC}/user/create-profile`,
     {
       profileId: userId,
       email,
       username,
-      profileImage: "",
+      profileImage: '',
     },
   );
 
   if (!profileCreate.status) {
-    await axios.delete('http://localhost:3002/auth/signup/delete-user', {
+    await axios.delete(`${URL_BASE_PUBLIC}/auth/signup/delete-user`, {
       data: { id: userId },
     });
     return res

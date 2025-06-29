@@ -4,6 +4,7 @@ import { oAuthCLient } from '../config/oAuthClient';
 import prisma from '../config/prismaClient';
 import axios from 'axios';
 import { generateTokens } from '../utils/generateTokens';
+import { URL_BASE_PUBLIC } from '../config/constants';
 
 export const LoginWithGoogle = errorHandler(async (req: Request, res: Response) => {
   const { code } = req.body;
@@ -58,11 +59,14 @@ export const LoginWithGoogle = errorHandler(async (req: Request, res: Response) 
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      maxAge: 15 * 60 * 1000,
+      maxAge: 24*60 * 60 * 1000,
     });
 
+  
     // Fetch profile
-    const profileRes = await axios.get(`http://localhost:3002/user/profile/id${user.id}`);
+
+    const profileRes = await axios.get(`${URL_BASE_PUBLIC}/user/profile/${user.id}`);
+    // console.log("profile",profileRes)
     const profile = profileRes.data?.data;
 
     return res.status(200).json({
